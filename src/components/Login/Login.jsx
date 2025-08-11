@@ -1,4 +1,4 @@
-import { Box, Button, TextField, Typography } from '@mui/material'
+import { Alert, Box, Button, Snackbar, TextField, Typography } from '@mui/material'
 import { useForm } from '../../hooks/useForm'
 import { socket } from '../../util/socket'
 import { useEffect, useState } from 'react'
@@ -13,7 +13,8 @@ export const Login = () => {
   })
 
   const[msgAlert,setMsgAlert]=useState(null)
-  const{checkingAuth}=userAuthStore()
+  const[open,setOpen]=useState(false)
+  const{checkingAuth,allUsersConnected,getActualUserNickName}=userAuthStore()
   const navigate = useNavigate()
 
 
@@ -21,19 +22,38 @@ export const Login = () => {
   useEffect(() => {
    socket.on('validateUser',(data) => {
     console.log('respuesta del servidor',data);
+
     if (data?._id) {
       console.log('existe una session',data._id);
+ 
+  
+  
       
-    
       checkingAuth(data)
+   
       navigate('userAuth/dashboard')
     }else{
       setMsgAlert(data)
+      setOpen(true)
     }
 
    })
+
+    socket.on('allUsers', (users) => {
+        console.log('usuarios conectados', users);
+        allUsersConnected(users)
+    })
+
+    socket.on('userConnected', (user) => {
+      console.log('usuario conectado  usuario a todos', user);
+      
+        getActualUserNickName(user)
+       
+    })
+
     return () => {
       socket.off('validateUser')
+     
     }
   },[])
 
@@ -87,6 +107,17 @@ export const Login = () => {
         <Button type='submit' variant='contained'>Ingresar</Button>
 
     </Box>
+    <Snackbar
+    open={open}
+    autoHideDuration={4000}
+    onClose={() => {setOpen(false)}}
+    anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+    >
+      <Alert onClose={() => {setOpen(false)}} severity="error" sx={{ width: '100%' }}>
+        {msgAlert}
+      </Alert>
+
+    </Snackbar>
     </>
   )
 }

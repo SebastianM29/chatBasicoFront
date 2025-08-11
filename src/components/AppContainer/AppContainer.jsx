@@ -2,10 +2,14 @@ import { useEffect } from "react";
 import { socket } from "../../util/socket"
 import { Box, Typography } from "@mui/material";
 import { Outlet } from "react-router-dom";
+import { userAuthStore } from "../../store/userAuthStore";
 
 
 
 export const AppContainer = () => {
+
+  const {allUsersConnected,allConnected} = userAuthStore()
+
 useEffect(() => {
     console.log('fuera del socket');
     
@@ -21,7 +25,8 @@ useEffect(() => {
   
   
   }, [])
-  
+
+
   return (
     <>
     <Box

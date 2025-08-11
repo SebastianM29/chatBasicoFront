@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom"
+import { Navigate, Outlet } from "react-router-dom"
 import { Navbar } from "../components/Navbar/Navbar"
 import { userAuthStore } from "../store/userAuthStore"
 import { Chat } from "../components/Chat/Chat"
@@ -8,6 +8,10 @@ export const Protected = () => {
 
     const{userAuth}=userAuthStore()
 
+  if (!userAuth._id) {
+    return <Navigate to={'/'} />
+  }
+
 
   return (
     <>
@@ -16,28 +20,23 @@ export const Protected = () => {
             <>
             
             <Navbar/>
-            <Grid container spacing={2}>
+            <Grid container spacing={1}>
 
-           <Grid size={{xs:12,md:4}}>
+           <Grid size={{xs:12,md:5}}>
              <Box
                  sx={{
-                 
-                 height: { md:"calc(100vh - 64px)", xs:'400px'},
-                 backgroundColor:'red',
-               
-                 border: "1px solid black",
-                 
+                 height: { md:"100vh", xs:'50vh'},
                  }}
-                 
+                
                  >
                  <Chat/>
                  </Box>
            </Grid>
-           <Grid size={{xs:12,md:8}}>
+           <Grid size={{xs:12,md:7}}>
               <Box
             sx={{
            
-            height: "calc(100vh - 64px)",
+            height:  { md:"100vh", xs:'50vh'},
             backgroundColor:'blue',
             border: "1px solid black"
             }}
@@ -49,11 +48,14 @@ export const Protected = () => {
            </Grid>
           </Grid>
 
+      
                 
             </>
         )
 
-    }
+      
+
+      }
     </>
   )
 }

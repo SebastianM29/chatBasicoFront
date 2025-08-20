@@ -6,16 +6,17 @@ export const useForm = (data = {}) => {
 
     const changeValue = (e,thisName) => {
         if (thisName) {
+            // El DatePicker devuelve directamente una fecha (no un event) ej:changeValue(newValue, "date")
             setForm({
                 ...form,
                 [thisName]:e
             })
             
         }else{
-            const{name,value} = e.target
+            const{name,value, files} = e.target
             setForm({
                 ...form,
-                [name]:value
+                [name]: files ? files[0] : value
             })
         }
     }

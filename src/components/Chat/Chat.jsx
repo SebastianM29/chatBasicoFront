@@ -8,7 +8,7 @@ import { socket } from "../../util/socket";
 
 export const Chat = () => {
   const[connected,setConnected] = useState()
-  const {allConnected} = userAuthStore()
+  const {allConnected,messages} = userAuthStore()
   const {msg,changeValue}=useForm({
     nickname:'',
     msg:''
@@ -20,6 +20,14 @@ export const Chat = () => {
     
     setConnected(allConnected)
   }, [allConnected]);
+  
+
+  useEffect(() => {
+    console.log('mensajes en el chat', messages);
+  }, [messages]);
+    
+
+
 
   const handleMsg = (e) => {
   e.preventDefault()
@@ -32,7 +40,7 @@ export const Chat = () => {
   return (
     <>
     <Grid container >
-    <Grid size={{xs:3,md:2}}>
+    <Grid size={{xs:3,md:4}}>
       <Box
       sx={{
         // backgroundColor:'black',
@@ -91,7 +99,7 @@ export const Chat = () => {
 
       </Box>
     </Grid>
-    <Grid size={{xs:9,md:10}}>
+    <Grid size={{xs:9,md:8}}>
       <Box
         
          sx={{
@@ -109,6 +117,13 @@ export const Chat = () => {
 
         }}
         >
+         
+        {      messages?.map((msg,index) => (
+                <Typography key={index}>
+                  <span style={{fontWeight:'bold'}}>{msg.user}:</span> {msg.msg}
+                </Typography>
+              ))
+            }
           
         </Box>
         <Box

@@ -1,11 +1,13 @@
-import { Box, Button, TextField } from "@mui/material"
+import { Box, Button, Grid, TextField, Typography } from "@mui/material"
 import { useForm } from "../../hooks/useForm"
 import { useState } from "react"
-import { useMutation } from "@tanstack/react-query"
-
+import {  useMutation, useQueryClient } from "@tanstack/react-query"
+import { sendingProducts } from "../../services/apiMutationsProducts"
+import { ProductList } from "../productList/ProductList"
 
 export const DashboardAdmin = () => {
   const [image,setImage]=useState('')
+  const queryClient = useQueryClient()
   const{name,price,description,img,changeValue} = useForm({
     name:'',
     price:'',
@@ -13,26 +15,12 @@ export const DashboardAdmin = () => {
     img:''
   })
   
-  const sendingProducts = async ( data) => {
-    const response = await fetch('http://localhost:3000/api/products', {
-      method: 'POST',
-      // headers: {
-      //   'Content-Type': 'multipart/form-data',
-      // },
-      body: data
-    })
-    if (!response.ok) {
-      const errorData = await response.json();
-      
-      throw new Error(errorData.message || 'Error en la solicitud');
-    }
-    
-    return response.json() 
-  }
+
   const {mutate,isLoading,isError,isSuccess}=useMutation({
     mutationFn: sendingProducts,
-    onSuccess: () => {
-      console.log('producto agregado');
+    onSuccess: (data) => {
+      console.log('producto agregado',data);
+      queryClient.invalidateQueries({queryKey:['products']})
       
     },
     onError: (error) => { 
@@ -49,16 +37,16 @@ export const DashboardAdmin = () => {
   
   
   const handleProductSubmit = (e) => {
-    e.preventDefault()
+   e.preventDefault()
     
-    console.log('vemos si anda',img,price,description,name);
+   console.log('vemos si anda',img,price,description,name);
    const data = new FormData()
     
-   data.append('name',name)
+   data.append('productName',name)
    data.append('price',price)
    data.append('description',description)
-   data.append('img',image)
-
+   data.append('imagePath',image)
+    console.log('data que se envia',data);
    mutate(data)
   
 
@@ -67,16 +55,56 @@ export const DashboardAdmin = () => {
       
   return (
     <>
+   
+    <Grid container sx={{ minHeight: '100vh' }}>
+
+      <Grid size={{ xs:12,md:5}}
+        sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '100vh',
+      }}
+      >
+
+        <Grid container
+        sx={{
+         width:'100%',
+          height:'100vh',
+        }}
+        >
+
+          <Grid sx={{
+            height:'50%'
+          }
+          } size={{ xs:12,md:12}}>
+    <Box
+    sx={{
+      width:'100%',
+      height:'100%',
+      display:'flex',
+      justifyContent:'center',
+      backgroundColor:'yellow'
+    }}
+    >
+
     <Box 
     sx={{
-      display:'flex',
-      flexFlow:'column'
+      
+    display:'flex',
+    flexFlow:'column',
+    width:'70%',
+    marginTop:'35px',
+    height:'350px',
+    padding:'50px',
+    gap:'3px'
     }}
     component={'form'}
     onSubmit={handleProductSubmit}
     encType="multipart/form-data"
     >
       <TextField
+      variant='outlined' 
       type='text'
       label='Nombre del Producto'
       name="name"
@@ -85,6 +113,7 @@ export const DashboardAdmin = () => {
       />
       
       <TextField
+      variant='outlined' 
       type='number'
       label='Precio del Producto'
       name="price"
@@ -92,6 +121,7 @@ export const DashboardAdmin = () => {
       onChange={changeValue}
       />
       <TextField
+      variant='outlined' 
       type='text'
       label='Descripcion'
       name="description"
@@ -103,8 +133,39 @@ export const DashboardAdmin = () => {
         <input type="file" onChange={handleImage} hidden/>
       </Button>
 
-      <Button type="submit"> cargar Producto</Button>
+      <Button  type="submit" variant="contained" color="primary"> cargar Producto</Button>
     </Box>
+    </Box>
+            
+          </Grid>
+          <Grid size={{ xs:12,md:5}}>
+
+          </Grid>
+
+
+
+
+        </Grid>
+
+      </Grid>
+      <Grid size={{xs:12,md:7}} 
+      sx={{
+        display:'flex',
+        height: '50vh',
+        flexDirection:'column',
+        alignItems:'end',
+        padding:'20px'
+        
+     
+       
+      }}
+      >
+        <ProductList/>
+      </Grid>
+    </Grid>
+
+   
+
     </>
   )
 }

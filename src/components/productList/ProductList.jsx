@@ -5,6 +5,7 @@ import { Box, Button, Card, CardActions, CardContent, CardMedia, Container, Typo
 import { deleProduct } from '../../services/deleteProduct'
 import { useState } from 'react'
 import { EditProducts } from '../EditProducts/EditProducts'
+import { socket } from '../../util/socket'
 
 export const ProductList = () => {
    const queryClient = useQueryClient()
@@ -53,7 +54,10 @@ export const ProductList = () => {
     setModal(true)
 
   }
-  
+  const start =(product) => {
+    console.log('comenzando remate',product);
+    socket.emit('start',product)
+  }
   if (isLoading) {
     <Typography>Cargando productos...</Typography>
   }
@@ -102,7 +106,7 @@ export const ProductList = () => {
         <CardActions>
          <Button  variant='outlined' onClick={() => handleEdit(product)} color='warning'>Editar</Button>
          <Button onClick={ () => deleteID(product._id)} variant='outlined' color='error'>Eliminar</Button>
-         <Button variant='outlined' >Comenzar Remate</Button>
+         <Button onClick={() => start(product)} variant='outlined' >Comenzar Remate</Button>
         </CardActions>
        </Card>
         

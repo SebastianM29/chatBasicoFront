@@ -15,9 +15,14 @@ export const EditProducts = ({close,product}) => {
 
     const {mutate}=useMutation({
         mutationFn: updateProducts,
-        onSuccess:() => {
+        onSuccess:(data) => {
+            console.log('producto actualizado',data.data);
+            
             queryClient.invalidateQueries({queryKey:['products']})
             close()
+        },
+        onError:(updateErr) => {
+            console.error('error al actualizar producto',updateErr)
         }
     })
 

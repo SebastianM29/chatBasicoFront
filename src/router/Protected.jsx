@@ -37,8 +37,8 @@ export const Protected = () => {
             sx={{
            
             height:  { md:"100vh", xs:'50vh'},
-            backgroundColor:'blue',
-            border: "1px solid black"
+            // backgroundColor:'blue',
+           
             }}
             >
                 <Outlet/>

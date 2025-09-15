@@ -113,7 +113,9 @@ export const Chat = () => {
         sx={{
           height:{xs:'30%',md:'85%'},
           backgroundColor:'#d1e0eaff',
-          borderRadius:'20px'
+          borderRadius:'20px',
+          padding:'15px',
+
 
         }}
         >

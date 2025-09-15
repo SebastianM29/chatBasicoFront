@@ -45,6 +45,7 @@ export const Navbar = () => {
           )
           
         }
+        <Button component={Link} to={'/userAuth/dashboard'} sx={{color:'red'}}>Remate</Button>
         <Button component={Link} to={'/userAuth/perfil'} sx={{color:'red'}}>Perfil</Button>
         <Button component={Link} to={'/userAuth/calendario'} sx={{color:'red'}}>Calendario</Button>
         <Button sx={{color:'red'}} onClick={handleClose}>Cerrar sesion</Button>

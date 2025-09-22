@@ -1,7 +1,154 @@
-import React from 'react'
+import { Box, Button, IconButton, InputAdornment, TextField, Typography } from '@mui/material'
+import React, { useState } from 'react'
+import { useForm } from '../../hooks/useForm'
+import { Visibility, VisibilityOff } from '@mui/icons-material'
+import { Link } from 'react-router-dom'
 
 export const Register = () => {
+  const [showPassword, setShowPassword] = useState(false)
+  const [image, setImage] = useState(null)
+  
+  const{name,nickname,email,pass,imagePath,changeValue} = useForm({
+    name:'',
+    nickname:'',
+    email: '',
+    pass:'',
+    imagePath:'',
+  })
+  const disabledRegister = Object.values({name,nickname,email,pass}).some((v) => !v)
+  const handleImage = (e) => {
+    console.log('viendo la direccion',e.target.files[0]);
+    setImage(e.target.files[0])
+  }
+  const handleRegister = (e) => {
+    e.preventDefault()
+    // Lógica de registro aquí
+    console.log({name,nickname,email,pass,image});
+    
+  }
+
   return (
-    <div>Register</div>
+    <>
+      <Box
+          component="form"
+          onSubmit={handleRegister}
+          sx={{
+            width: '60%',
+            
+            bgcolor: 'background.paper',
+            borderRadius: 3,
+            boxShadow: 8,
+            p: { xs: 3, sm: 4 },
+            backdropFilter: 'blur(6px)'
+          }}
+        >
+          {/* Encabezado */}
+          <Box sx={{ textAlign: 'center', mb: 2 }}>
+            <Typography variant="h5" sx={{ fontWeight: 800, letterSpacing: 0.3 }}>
+              Registrarse
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+             Complete los campos
+            </Typography>
+          </Box>
+
+          {/* Campos */}
+          <Box sx={{ display: 'grid', gap: 2.5, mt: 2 }}>
+            <TextField
+              type="text"
+              label="Ingrese su nombre"
+              name="name"
+              value={name}
+              onChange={changeValue}
+              fullWidth
+              size="medium"
+              autoComplete="email"
+            />
+            <TextField
+              type="text"
+              label="Ingrese su nickname"
+              name="nickname"
+              value={nickname}
+              onChange={changeValue}
+              fullWidth
+              size="medium"
+              autoComplete="email"
+            />
+            <TextField
+              type="email"
+              label="Ingrese su Email"
+              name="email"
+              value={email}
+              onChange={changeValue}
+              fullWidth
+              size="medium"
+              autoComplete="email"
+            />
+
+            
+            <Button variant='outlined' component="label">
+              Subir Imagen
+              <input type='file' onChange={handleImage} hidden />
+
+            </Button>
+
+            <TextField
+              label="Ingrese password"
+              name="pass"
+              value={pass}
+              onChange={changeValue}
+              type={showPassword ? 'text' : 'password'}
+              fullWidth
+              size="medium"
+              autoComplete="current-password"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      edge="end"
+                      aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                      onClick={() => setShowPassword((v) => !v)}
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                )
+              }}
+            />
+
+
+            <Button
+              type="submit"
+              variant="contained"
+              disabled={disabledRegister}
+              // startIcon={<LoginIcon />}
+              sx={{
+                mt: 0.5,
+                py: 1.2,
+                fontWeight: 700,
+                textTransform: 'none',
+                borderRadius: 2
+              }}
+              fullWidth
+            >
+              Registrarse
+            </Button>
+          </Box>
+
+          {/* Pie con nota pequeña */}
+          <Typography
+            component={Link}
+            to={'/login'}
+            variant="caption"
+            color="text.secondary"
+            sx={{ display: 'block', textAlign: 'center', mt: 2 }}
+          >
+           Inicie sesion
+          </Typography>
+        
+        
+        </Box>
+      
+    </>
   )
 }

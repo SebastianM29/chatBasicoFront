@@ -9,7 +9,7 @@ addMessages:(data) => set((info) => {
     console.log('info en el sotre',data);
       
     const updated = [...info.messages,data]
-    return {messages:updated.slice(-10)}
+    return {messages:updated.slice(-7)}
     }),
     userAuth:{},
     actualUserNickname:'',

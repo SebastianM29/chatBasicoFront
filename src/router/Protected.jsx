@@ -41,7 +41,9 @@ export const Protected = () => {
            
             }}
             >
+
                 <Outlet/>
+                
             </Box>  
 
 

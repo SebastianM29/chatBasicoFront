@@ -1,123 +1,185 @@
-import { Alert, Box, Button, Snackbar, TextField, Typography } from '@mui/material'
+import { Alert, Box, Button, IconButton, InputAdornment, Snackbar, TextField, Typography } from '@mui/material'
+import { Visibility, VisibilityOff, Login as LoginIcon } from '@mui/icons-material'
 import { useForm } from '../../hooks/useForm'
 import { socket } from '../../util/socket'
 import { useEffect, useState } from 'react'
 import { userAuthStore } from '../../store/userAuthStore'
-import { useNavigate } from 'react-router-dom'
-
+import { Link, useNavigate } from 'react-router-dom'
 
 export const Login = () => {
-  const{email,password,changeValue}=useForm({
-    email:'',
-    password:''
+  const { email, password, changeValue } = useForm({
+    email: '',
+    password: ''
   })
 
-  const[msgAlert,setMsgAlert]=useState(null)
-  const[open,setOpen]=useState(false)
-  const{checkingAuth,allUsersConnected,getActualUserNickName}=userAuthStore()
+  const [msgAlert, setMsgAlert] = useState(null)
+  const [open, setOpen] = useState(false)
+  const [showPassword, setShowPassword] = useState(false) // 👈 agregado (no renombra nada tuyo)
+
+  const { checkingAuth, allUsersConnected, getActualUserNickName } = userAuthStore()
   const navigate = useNavigate()
 
-
-   
   useEffect(() => {
-   socket.on('validateUser',(data) => {
-    console.log('respuesta del servidor',data);
-
-    if (data?._id) {
-      console.log('existe una session',data._id);
- 
-  
-  
-      
-      checkingAuth(data)
-   
-      navigate('userAuth/dashboard')
-    }else{
-      setMsgAlert(data)
-      setOpen(true)
+    const onValidateUser = (data) => {
+      if (data?._id) {
+        checkingAuth(data)
+        navigate('userAuth/dashboard')
+      } else {
+        setMsgAlert(data)
+        setOpen(true)
+      }
     }
 
-   })
+    const onAllUsers = (users) => {
+      allUsersConnected(users)
+    }
 
-    socket.on('allUsers', (users) => {
-        console.log('usuarios conectados', users);
-        allUsersConnected(users)
-    })
+    const onUserConnected = (user) => {
+      getActualUserNickName(user)
+    }
 
-    socket.on('userConnected', (user) => {
-      console.log('usuario conectado  usuario a todos', user);
-      
-        getActualUserNickName(user)
-       
-    })
+    socket.on('validateUser', onValidateUser)
+    socket.on('allUsers', onAllUsers)
+    socket.on('userConnected', onUserConnected)
 
     return () => {
-      socket.off('validateUser')
-     
+      socket.off('validateUser', onValidateUser)
+      // socket.off('allUsers', onAllUsers)
+      // socket.off('userConnected', onUserConnected)
     }
-  },[])
-
-
-  
-  
-  
+  }, [checkingAuth, allUsersConnected, getActualUserNickName, navigate])
 
   const handleLogin = (e) => {
     e.preventDefault()
-    console.log('haciendo click en login',email,password);
-    socket.emit('sendUser',{email,password})
-
-
-    
+    socket.emit('sendUser', { email, password })
   }
+
+  const disabledSubmit = !email || !password
 
   return (
     <>
-    <Typography>Desde login</Typography>
-    <Box
-    component={'form'}
-    sx={{
-        display:'flex',
-        flexFlow:'column',
-        width:"250px",
-        height:"350px",
-        padding:"25px",
-        backgroundColor:'red',
-        gap:'50px'
-    }}
-    
-    onSubmit={handleLogin}
+   
+        {/* Tarjeta de login */}
+        <Box
+          component="form"
+          onSubmit={handleLogin}
+          sx={{
+            width: '50%',
 
-    >
-        <TextField
-        type='email'
-        label='Ingrese su Email'
-        name='email'
-        value={email}
-        onChange={changeValue}
-        />
-        <TextField
-        type='password'
-        label='Ingrese password'
-        name='password'
-        value={password}
-        onChange={changeValue}
-        />
+            
+            bgcolor: 'background.paper',
+            borderRadius: 3,
+            boxShadow: 8,
+            p: { xs: 3, sm: 4 },
+            backdropFilter: 'blur(6px)'
+          }}
+        >
+          {/* Encabezado */}
+          <Box sx={{ textAlign: 'center', mb: 2 }}>
+            <Typography variant="h5" sx={{ fontWeight: 800, letterSpacing: 0.3 }}>
+              Iniciar sesión
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+              Accedé para continuar al panel de remates
+            </Typography>
+          </Box>
 
-        <Button type='submit' variant='contained'>Ingresar</Button>
+          {/* Campos */}
+          <Box sx={{ display: 'grid', gap: 2.5, mt: 2 }}>
+            <TextField
+              type="email"
+              label="Ingrese su Email"
+              name="email"
+              value={email}
+              onChange={changeValue}
+              fullWidth
+              size="medium"
+              autoComplete="email"
+            />
 
-    </Box>
-    <Snackbar
-    open={open}
-    autoHideDuration={4000}
-    onClose={() => {setOpen(false)}}
-    anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-    >
-      <Alert onClose={() => {setOpen(false)}} severity="error" sx={{ width: '100%' }}>
-        {msgAlert}
-      </Alert>
+            <TextField
+              label="Ingrese password"
+              name="password"
+              value={password}
+              onChange={changeValue}
+              type={showPassword ? 'text' : 'password'}
+              fullWidth
+              size="medium"
+              autoComplete="current-password"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      edge="end"
+                      aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                      onClick={() => setShowPassword((v) => !v)}
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                )
+              }}
+            />
 
-    </Snackbar>
+            <Button
+              type="submit"
+              variant="contained"
+              disabled={disabledSubmit}
+              startIcon={<LoginIcon />}
+              sx={{
+                mt: 0.5,
+                py: 1.2,
+                fontWeight: 700,
+                textTransform: 'none',
+                borderRadius: 2
+              }}
+              fullWidth
+            >
+              Ingresar
+            </Button>
+          </Box>
+
+          {/* Pie con nota pequeña */}
+          <Typography
+            component={Link}
+            to={'/register'}
+            variant="caption"
+            color="text.secondary"
+            sx={{ display: 'block', textAlign: 'center', mt: 2 }}
+          >
+            Registrarse
+          </Typography>
+        
+          <Typography
+            
+            variant="caption"
+            color="text.secondary"
+            sx={{ display: 'block', textAlign: 'center', mt: 2 }}
+          >
+            ¿Olvidaste tu contraseña? Contactá al administrador.
+          </Typography>
+        </Box>
+      
+
+      {/* Alertas */}
+      <Snackbar
+        open={open}
+        autoHideDuration={4000}
+        onClose={() => {
+          setOpen(false)
+        }}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert
+          onClose={() => {
+            setOpen(false)
+          }}
+          severity="error"
+          sx={{ width: '100%' }}
+        >
+          {msgAlert}
+        </Alert>
+      </Snackbar>
     </>
   )
 }

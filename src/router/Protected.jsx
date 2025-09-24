@@ -24,9 +24,7 @@ export const Protected = () => {
 
            <Grid size={{xs:12,md:5}}>
              <Box
-                 sx={{
-                 height: { md:"100vh", xs:'50vh'},
-                 }}
+                sx={{ height: "100%", display: "flex",justifyContent:'center',gap:'30px' }}
                 
                  >
                  <Chat/>
@@ -34,12 +32,7 @@ export const Protected = () => {
            </Grid>
            <Grid size={{xs:12,md:7}}>
               <Box
-            sx={{
-           
-            height:  { md:"100vh", xs:'50vh'},
-            // backgroundColor:'blue',
-           
-            }}
+           sx={{ height: "100%", display: "flex",justifyContent:'center' }}
             >
 
                 <Outlet/>

@@ -23,7 +23,7 @@ export const Login = () => {
     const onValidateUser = (data) => {
       if (data?._id) {
         checkingAuth(data)
-        navigate('userAuth/dashboard')
+        navigate('/userAuth/dashboard')
       } else {
         setMsgAlert(data)
         setOpen(true)
@@ -35,6 +35,8 @@ export const Login = () => {
     }
 
     const onUserConnected = (user) => {
+      console.log('user conectado', user);
+      
       getActualUserNickName(user)
     }
 

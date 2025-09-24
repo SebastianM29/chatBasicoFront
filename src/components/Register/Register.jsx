@@ -3,6 +3,8 @@ import React, { useState } from 'react'
 import { useForm } from '../../hooks/useForm'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 import { Link } from 'react-router-dom'
+import { useMutation } from '@tanstack/react-query'
+import { registerUser } from '../../services/registerUSer'
 
 export const Register = () => {
   const [showPassword, setShowPassword] = useState(false)
@@ -16,14 +18,31 @@ export const Register = () => {
     imagePath:'',
   })
   const disabledRegister = Object.values({name,nickname,email,pass}).some((v) => !v)
-  const handleImage = (e) => {
-    console.log('viendo la direccion',e.target.files[0]);
-    setImage(e.target.files[0])
-  }
+  const{mutate}=useMutation({
+    mutationFn:registerUser,
+    onSuccess:(data)   => {
+      console.log('usuario registrado con exito',data);  
+    },
+    onError: (error) => {
+      console.log('este es el error',error);
+    }
+  })
+
+
+
   const handleRegister = (e) => {
     e.preventDefault()
     // Lógica de registro aquí
-    console.log({name,nickname,email,pass,image});
+    console.log('quiero ver la imagen',imagePath);
+    
+    const formData = new FormData()
+
+    formData.append('name',name)
+    formData.append('nickname',nickname)
+    formData.append('email',email)
+    formData.append('pass',pass)
+    formData.append('imagePath',imagePath)
+    mutate(formData)
     
   }
 
@@ -88,7 +107,11 @@ export const Register = () => {
             
             <Button variant='outlined' component="label">
               Subir Imagen
-              <input type='file' onChange={handleImage} hidden />
+              <input
+               type='file'
+               name='imagePath'
+               accept='image/*'
+               onChange={changeValue} hidden />
 
             </Button>
 

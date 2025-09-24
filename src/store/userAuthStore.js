@@ -13,14 +13,16 @@ addMessages:(data) => set((info) => {
     }),
     userAuth:{},
     actualUserNickname:'',
+    imagePath:'',
     userConected:false,
     allConnected: [],
     socket:null,
 
 getActualUserNickName : (user) => {
       set(
-        {actualUserNickname:user.nickname,
-        socket:user.socket || null}
+        { actualUserNickname:user.user,
+          imagePath:user.imagePath,
+          socket:user.socket || null}
       )
     },
 

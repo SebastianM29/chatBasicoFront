@@ -1,6 +1,7 @@
 import { Alert, AppBar, Avatar, Box, Button, Chip, Container, IconButton, Menu, MenuItem, Snackbar, Toolbar, Tooltip, Typography } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { socket as sock } from "../../util/socket";
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import PersonIcon from '@mui/icons-material/Person';
@@ -11,15 +12,24 @@ import { userAuthStore } from '../../store/userAuthStore';
 import { useEffect, useMemo, useState } from 'react';
 
 export const Navbar = () => {
-  const { userAuth, actualUserNickname, socket } = userAuthStore();
+  const { userAuth, actualUserNickname,imagePath, socket } = userAuthStore();
   const [alert, setAlert] = useState(false);
+  const [thisUser, setThisUser] = useState();
   const [anchorEl, setAnchorEl] = useState(null);
   const location = useLocation();
-
+ 
   const handleClose = () => {
     console.log('socket.id', socket?.id);
     socket?.emit('logout', socket?.id);
   };
+  
+    useEffect(() => {
+      sock.emit('whoAmI', (user) => {
+        console.log('yo soy', user);
+        
+        setThisUser(user);
+      });
+    }, []);
 
   useEffect(() => {
     setAlert(true);
@@ -27,10 +37,10 @@ export const Navbar = () => {
   }, [socket]);
 
   // inicial del avatar
-  const initial = useMemo(
-    () => (actualUserNickname?.trim()?.[0]?.toUpperCase() ?? 'U'),
-    [actualUserNickname]
-  );
+  // const initial = useMemo(
+  //   () => (actualUserNickname?.trim()?.[0]?.toUpperCase() ?? 'U'),
+  //   [actualUserNickname]
+  // );
 
   // helper para saber si la ruta está activa
   const isActive = (to) => location.pathname.startsWith(to);
@@ -108,15 +118,18 @@ export const Navbar = () => {
 
             {/* Usuario + Logout */}
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Tooltip title={actualUserNickname || 'Usuario'}>
+              <Tooltip title={thisUser?.nickname || 'Usuario'}>
                 <Avatar
+                 alt={thisUser?.nickname  || 'Usuario'}
+                 src={imagePath ? `http://localhost:3000/${thisUser?.imagePath}` : undefined}
                   sx={{
+                    
                     width: 36, height: 36,
                     bgcolor: (t) => (t.palette.mode === 'dark' ? t.palette.primary.dark : t.palette.primary.main),
                     fontWeight: 700
                   }}
                 >
-                  {initial}
+                  {/* {initial} */}
                 </Avatar>
               </Tooltip>
 
@@ -125,7 +138,7 @@ export const Navbar = () => {
                 sx={{ display: { xs: 'none', sm: 'block' }, maxWidth: 180 }}
                 noWrap
               >
-                {actualUserNickname || 'Invitado'}
+                {thisUser?.nickname|| 'Invitado'}
               </Typography>
 
               <Button

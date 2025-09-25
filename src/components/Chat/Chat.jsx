@@ -15,7 +15,7 @@ export const Chat = () => {
     socket.emit('whoAmI', (user) => {
       console.log('yo soy', user);
       
-      setThisUser(user);
+      setThisUser(user.user);
     });
   }, []);
   
@@ -120,7 +120,7 @@ export const Chat = () => {
         display: 'flex',
         flexDirection: 'column',
         gap: 2,
-        height: { xs: 'auto', md: '80vh' },
+        height: { xs: '40vh', md: '80vh' },
       }}
     >
       {/* Mensajes */}

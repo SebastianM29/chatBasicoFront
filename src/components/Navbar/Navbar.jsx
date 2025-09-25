@@ -7,7 +7,7 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import PersonIcon from '@mui/icons-material/Person';
 import GavelIcon from '@mui/icons-material/Gavel';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Link, NavLink, redirect, useLocation, useNavigate } from 'react-router-dom';
 import { userAuthStore } from '../../store/userAuthStore';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -17,10 +17,13 @@ export const Navbar = () => {
   const [thisUser, setThisUser] = useState();
   const [anchorEl, setAnchorEl] = useState(null);
   const location = useLocation();
+  // const navigate = useNavigate()
  
   const handleClose = () => {
-    console.log('socket.id', socket?.id);
-    socket?.emit('logout', socket?.id);
+    console.log('cerrando sesión',thisUser);
+    
+   sock.disconnect();
+   window.location.href = '/login';
   };
   
     useEffect(() => {
@@ -65,10 +68,10 @@ export const Navbar = () => {
     backgroundColor: 'rgba(18,18,18,0.7)', // oscuro translúcido
   }}
       >
-        <Container maxWidth="lg">
-          <Toolbar disableGutters sx={{ gap: 1, minHeight: 64 }}>
+        
+          <Toolbar disableGutters sx={{ gap: 1, minHeight: 64 ,margin:'10px'}}>
             {/* Logo / Título */}
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2, mr: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mr: 1 }}>
               <DashboardIcon sx={{ opacity: 0.9 }} />
               <Typography
                 variant="h6"
@@ -118,10 +121,10 @@ export const Navbar = () => {
 
             {/* Usuario + Logout */}
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Tooltip title={thisUser?.nickname || 'Usuario'}>
+              <Tooltip title={thisUser?.user?.nickname || 'Usuario'}>
                 <Avatar
-                 alt={thisUser?.nickname  || 'Usuario'}
-                 src={imagePath ? `http://localhost:3000/${thisUser?.imagePath}` : undefined}
+                 alt={thisUser?.user?.nickname  || 'Usuario'}
+                 src={imagePath ? `http://localhost:3000/${thisUser?.user?.imagePath}` : undefined}
                   sx={{
                     
                     width: 36, height: 36,
@@ -138,7 +141,7 @@ export const Navbar = () => {
                 sx={{ display: { xs: 'none', sm: 'block' }, maxWidth: 180 }}
                 noWrap
               >
-                {thisUser?.nickname|| 'Invitado'}
+                {thisUser?.user?.nickname|| 'Invitado'}
               </Typography>
 
               <Button
@@ -161,7 +164,7 @@ export const Navbar = () => {
               </IconButton>
             </Box>
           </Toolbar>
-        </Container>
+       
 
         {/* Mobile menu */}
         <Menu

@@ -14,7 +14,7 @@ export const Login = () => {
 
   const [msgAlert, setMsgAlert] = useState(null)
   const [open, setOpen] = useState(false)
-  const [showPassword, setShowPassword] = useState(false) // 👈 agregado (no renombra nada tuyo)
+  const [showPassword, setShowPassword] = useState(false) 
 
   const { checkingAuth, allUsersConnected, getActualUserNickName } = userAuthStore()
   const navigate = useNavigate()

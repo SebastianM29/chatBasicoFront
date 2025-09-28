@@ -27,6 +27,8 @@ getActualUserNickName : (user) => {
     },
 
 checkingAuth: (user) => {
+     console.log('user en el store se vera por unica vez', user);
+     
       set({userAuth:user})
       
     },

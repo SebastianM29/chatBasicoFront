@@ -14,25 +14,19 @@ import { useEffect, useMemo, useState } from 'react';
 export const Navbar = () => {
   const { userAuth, actualUserNickname,imagePath, socket } = userAuthStore();
   const [alert, setAlert] = useState(false);
-  const [thisUser, setThisUser] = useState();
+ 
   const [anchorEl, setAnchorEl] = useState(null);
   const location = useLocation();
   // const navigate = useNavigate()
  
   const handleClose = () => {
-    console.log('cerrando sesión',thisUser);
+    console.log('cerrando sesión',userAuth);
     
    sock.disconnect();
    window.location.href = '/login';
   };
   
-    useEffect(() => {
-      sock.emit('whoAmI', (user) => {
-        console.log('yo soy', user);
-        
-        setThisUser(user);
-      });
-    }, []);
+ 
 
   useEffect(() => {
     setAlert(true);
@@ -121,10 +115,10 @@ export const Navbar = () => {
 
             {/* Usuario + Logout */}
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Tooltip title={thisUser?.user?.nickname || 'Usuario'}>
+              <Tooltip title={userAuth?.nickname || 'Usuario'}>
                 <Avatar
-                 alt={thisUser?.user?.nickname  || 'Usuario'}
-                 src={imagePath ? `http://localhost:3000/${thisUser?.user?.imagePath}` : undefined}
+                 alt={userAuth?.nickname  || 'Usuario'}
+                 src={imagePath ? `http://localhost:3000/${userAuth?.imagePath}` : undefined}
                   sx={{
                     
                     width: 36, height: 36,
@@ -141,7 +135,7 @@ export const Navbar = () => {
                 sx={{ display: { xs: 'none', sm: 'block' }, maxWidth: 180 }}
                 noWrap
               >
-                {thisUser?.user?.nickname|| 'Invitado'}
+                {userAuth?.nickname|| 'Invitado'}
               </Typography>
 
               <Button

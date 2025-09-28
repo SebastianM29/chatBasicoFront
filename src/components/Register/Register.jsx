@@ -5,12 +5,13 @@ import { Visibility, VisibilityOff } from '@mui/icons-material'
 import { Link } from 'react-router-dom'
 import { useMutation } from '@tanstack/react-query'
 import { registerUser } from '../../services/registerUSer'
+import { enqueueSnackbar } from 'notistack'
 
 export const Register = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [image, setImage] = useState(null)
   
-  const{name,nickname,email,pass,imagePath,changeValue} = useForm({
+  const{name,nickname,email,pass,imagePath,changeValue,resetForm} = useForm({
     name:'',
     nickname:'',
     email: '',
@@ -22,9 +23,11 @@ export const Register = () => {
     mutationFn:registerUser,
     onSuccess:(data)   => {
       console.log('usuario registrado con exito',data);  
+      enqueueSnackbar('Usuario registrado con exito',{variant:'success'})
     },
     onError: (error) => {
       console.log('este es el error',error);
+      enqueueSnackbar('Error al Registrar usuario',{variant:'error'})
     }
   })
 
@@ -43,6 +46,7 @@ export const Register = () => {
     formData.append('pass',pass)
     formData.append('imagePath',imagePath)
     mutate(formData)
+    resetForm()
     
   }
 

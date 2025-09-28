@@ -5,6 +5,7 @@ import { socket } from '../../util/socket'
 import { useEffect, useState } from 'react'
 import { userAuthStore } from '../../store/userAuthStore'
 import { Link, useNavigate } from 'react-router-dom'
+import { enqueueSnackbar } from 'notistack'
 
 export const Login = () => {
   const { email, password, changeValue } = useForm({
@@ -12,7 +13,7 @@ export const Login = () => {
     password: ''
   })
 
-  const [msgAlert, setMsgAlert] = useState(null)
+  // const [msgAlert, setMsgAlert] = useState(null)
   const [open, setOpen] = useState(false)
   const [showPassword, setShowPassword] = useState(false) 
 
@@ -25,7 +26,7 @@ export const Login = () => {
         checkingAuth(data)
         navigate('/userAuth/dashboard')
       } else {
-        setMsgAlert(data)
+        enqueueSnackbar(data,{variant:'error'})
         setOpen(true)
       }
     }
@@ -163,8 +164,8 @@ export const Login = () => {
         </Box>
       
 
-      {/* Alertas */}
-      <Snackbar
+  
+      {/* <Snackbar
         open={open}
         autoHideDuration={4000}
         onClose={() => {
@@ -181,7 +182,7 @@ export const Login = () => {
         >
           {msgAlert}
         </Alert>
-      </Snackbar>
+      </Snackbar> */}
     </>
   )
 }

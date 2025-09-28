@@ -1,14 +1,19 @@
 import {
   Box, Card, CardContent, CardMedia, CardHeader,
-  Typography, CardActions, TextField, Button, Stack
+  Typography, CardActions, TextField, Button, Stack,
+  Avatar
 } from "@mui/material";
 import { socket } from "../../util/socket";
 import { useEffect, useState } from "react";
 import { userAuthStore } from "../../store/userAuthStore";
+import { AnimatePresence, motion } from "framer-motion";
+
+
 
 export const DashBoard = () => {
   const [data, setData] = useState(null);  // { product, time }
   const [oferta, setOferta] = useState(null);
+  const [user, setuser] = useState(null)
   const [bid, setBid] = useState("");
   const{actualUserNickname} = userAuthStore()
 
@@ -24,20 +29,33 @@ export const DashBoard = () => {
       setData((prev) => (prev ? { ...prev, time } : prev));
 
     socket.on("startR", onStart);
+
     socket.on('newBid', (bid) => {
       console.log('Nueva oferta recibida:', bid);
       setOferta(bid);
-      //actualizar el estado o realizar otras acciones con la nueva oferta
+      setuser(bid)
+      
+      setTimeout(() => {
+        setOferta(null)
+      }, 3000);
+    
     })
+
+
     socket.emit("currentProduct", (respCb) => respCb && setData(respCb));
     socket.on("tick", onTick);
     socket.on("end", (prod) => {
       console.log("Remate finalizado", prod);
+      setData(null);
     });
+
+
 
     return () => {
       socket.off("startR", onStart);
       socket.off("tick", onTick);
+      socket.off('newBid');
+      socket.off('end');
     };
   }, []);
 
@@ -98,7 +116,7 @@ export const DashBoard = () => {
             </Box>
           </Typography>
           <Typography sx={{ textAlign: "center", mt: 2, fontSize: { xs: 20, md: 28 }, fontWeight: "bold" }}>
-            {oferta ? `Última oferta: $${oferta.highestBid} por ${oferta.highestBidder?.nickname}` : "Aún no hay ofertas"}
+            {user ? `Última oferta: $${user?.highestBid} por ${user?.highestBidder?.nickname}` : "Aún no hay ofertas"}
           </Typography>
         </CardContent>
 
@@ -131,6 +149,48 @@ export const DashBoard = () => {
           </Stack>
         </CardActions>
       </Card>
+      <AnimatePresence
+     
+      >
+        {
+          oferta && (
+            <motion.div
+             initial={{y:100,opacity:0}}
+             animate={{y:200,opacity:1}}
+             exit={{y:400,opacity:0}}
+             transition={{duration : 0.5}}
+             style={{
+                position:'absolute',
+                top:20,
+                left:'50%',
+                transform:'translateX(-50%)',
+                zIndex:1000
+              }}
+             >
+              <Box
+              sx={{
+                bgcolor: "#d2c019ff",
+                color: "white",
+                px: 3,
+                py: 1.5,
+                borderRadius: 2,
+                boxShadow: 4,
+              }}
+              >
+                <Avatar src={user ? `http://localhost:3000/${user?.highestBidder?.imagePath}` : undefined} >
+
+                </Avatar>
+                <Typography variant="h6" fontWeight="bold">
+                     Última oferta: ${oferta?.highestBid} por {oferta?.highestBidder?.nickname}
+               </Typography>
+
+              </Box>
+
+            </motion.div>
+          )
+        }
+
+      </AnimatePresence>
     </Box>
   );
 };

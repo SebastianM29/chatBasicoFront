@@ -11,12 +11,13 @@ addMessages:(data) => set((info) => {
     const updated = [...info.messages,data]
     return {messages:updated.slice(-7)}
     }),
-    userAuth:{},
-    actualUserNickname:'',
-    imagePath:'',
-    userConected:false,
-    allConnected: [],
-    socket:null,
+ userAuth:{},
+ actualUserNickname:'',
+ imagePath:'',
+ userConected:false,
+ allConnected: [],
+ socket:null,
+ buyer:null,
 
 getActualUserNickName : (user) => {
       set(
@@ -37,6 +38,13 @@ allUsersConnected: (users) => {
       set({allConnected: users})
       console.log('usuarios en el store', users);
     },
+
+actualBuyer: (data) => {
+  console.log('deberia llegar el resultad del cpmpprador',data);
+  
+  set({buyer:data})
+}
+
 
 
 }))

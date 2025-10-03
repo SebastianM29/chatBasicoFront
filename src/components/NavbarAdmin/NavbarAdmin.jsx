@@ -49,8 +49,8 @@ export const NavbarAdmin = () => {
       ? [{ to: '/admin/dashboardAdmin', label: 'Admin', icon: <AdminPanelSettingsIcon fontSize="small" /> }]
       : []),
     { to: '/userAuth/dashboard', label: 'Remate', icon: <GavelIcon fontSize="small" /> },
-    { to: '/userAuth/perfil', label: 'Administrar Perfiles', icon: <PersonIcon fontSize="small" /> },
-    { to: '/userAuth/perfil', label: 'Usuarios', icon: <PersonIcon fontSize="small" /> },
+    { to: '/admin/manageProfiles', label: 'Administrar Perfiles', icon: <PersonIcon fontSize="small" /> },
+ 
     { to: '/userAuth/calendario', label: 'Agregar fecha', icon: <CalendarMonthIcon fontSize="small" /> }
   ];
 
@@ -89,9 +89,9 @@ export const NavbarAdmin = () => {
 
             {/* Desktop nav */}
             <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1.5, ml: 3, flexGrow: 1 }}>
-              {navItems.map((item) => (
+              {navItems.map((item,key) => (
                 <Button
-                  key={item.to}
+                  key={key}
                   component={NavLink}
                   to={item.to}
                   startIcon={item.icon}

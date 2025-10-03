@@ -62,36 +62,64 @@ export const EditProducts = ({close,product}) => {
                     display: 'flex',
                     flexFlow: 'column',
                     width:'300px',
-                    bgcolor: 'background.paper',
+                    bgcolor: 'rgba(77, 77, 77, 1)',
                     boxShadow: 5,
                     p: 4,
                     alignItems:'center',
-                    gap:2
+                    gap:2,
+                    borderRadius:'15px'
                     
                 }}
         >
-            <Typography>Editar Producto</Typography>
+            <Typography sx={{ marginBottom:'20px', color: 'rgba(236, 134, 0, 0.93)' ,fontSize:'20px' , fontWeight: 700 , fontFamily:"'Montserrat', sans-serif",}}>
+                Editar Producto
+            </Typography>
              <TextField
              label="nombre"
              name='productName'
              value={formState.productName}
              onChange={handleChange}
+               slotProps={{
+             htmlInput: {
+               style: { color: "white" }   // estilo al <input> nativo
+              },
+              inputLabel: {
+               style: { color: "rgba(236, 134, 0, 0.93)" }   // estilo al label
+             }
+            }}
+
              />
              <TextField
              label="precio"
              name='price'
              value={formState.price}
              onChange={handleChange}
+                slotProps={{
+             htmlInput: {
+               style: { color: "white" }   // estilo al <input> nativo
+              },
+              inputLabel: {
+               style: { color: "rgba(236, 134, 0, 0.93)" }   // estilo al label
+             }
+            }}
              />
              <TextField
              label="nombre"
              name='description'
              value={formState.description}
              onChange={handleChange}
+                slotProps={{
+             htmlInput: {
+               style: { color: "white" }   // estilo al <input> nativo
+              },
+              inputLabel: {
+               style: { color: "rgba(236, 134, 0, 0.93)" }   // estilo al label
+             }
+            }}
              />
             <Box>
 
-            <Button type='submit'   >   Editar Producto</Button>
+            <Button type='submit' color='success' variant='contained'  >   Editar Producto</Button>
             </Box>
 
 

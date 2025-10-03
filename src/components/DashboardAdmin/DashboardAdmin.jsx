@@ -4,11 +4,12 @@ import { useState } from "react"
 import {  useMutation, useQueryClient } from "@tanstack/react-query"
 import { sendingProducts } from "../../services/apiMutationsProducts"
 import { ProductList } from "../productList/ProductList"
+import { enqueueSnackbar } from "notistack"
 
 export const DashboardAdmin = () => {
-  const [image,setImage]=useState('')
+  
   const queryClient = useQueryClient()
-  const{name,price,description,img,changeValue} = useForm({
+  const{name,price,description,img,changeValue,resetForm} = useForm({
     name:'',
     price:'',
     description:'',
@@ -16,25 +17,24 @@ export const DashboardAdmin = () => {
   })
   
 
+  const disabledSubmit = !name || !price || !description || !img
+  // const disabled = Object.values({name,price,description,img}).some((v) => !v)
+
   const {mutate,isLoading,isError,isSuccess}=useMutation({
     mutationFn: sendingProducts,
     onSuccess: (data) => {
       console.log('producto agregado',data);
       queryClient.invalidateQueries({queryKey:['products']})
-      
+      enqueueSnackbar('Argegado exitosamente',{variant:'success'})
     },
     onError: (error) => { 
       console.error('error al enviar producto',error);
-      
+      enqueueSnackbar( error?.message || "Error desconocido", { variant: 'error' });
     }
     
   })
   
-  const handleImage = (e) => {
-    console.log('viendo la direccion',e.target.files[0]);
-    setImage(e.target.files[0])
-  }
-  
+
   
   const handleProductSubmit = (e) => {
    e.preventDefault()
@@ -45,18 +45,21 @@ export const DashboardAdmin = () => {
    data.append('productName',name)
    data.append('price',price)
    data.append('description',description)
-   data.append('imagePath',image)
+   data.append('imagePath',img)
     console.log('data que se envia',data);
    mutate(data)
+   resetForm()
   
 
 
   }
+
+  
       
   return (
     <>
    
-    <Grid container sx={{ minHeight: '100vh' }}>
+    <Grid container sx={{ backgroundColor:'rgba(49, 54, 51, 1)', height: '100vh' }} >
 
       <Grid size={{ xs:12,md:5}}
         sx={{
@@ -64,27 +67,23 @@ export const DashboardAdmin = () => {
         justifyContent: 'center',
         alignItems: 'center',
         minHeight: '100vh',
+        width: '100%',
+        backgroundColor:'rgba(106, 107, 106, 0.6)'
+        
       }}
       >
 
-        <Grid container
-        sx={{
-         width:'100%',
-          height:'100vh',
-        }}
-        >
+     
 
-          <Grid sx={{
-            height:'50%'
-          }
-          } size={{ xs:12,md:12}}>
+       
     <Box
     sx={{
-      width:'100%',
-      height:'100%',
+      width:'50%',
+      height:'36%',
       display:'flex',
       justifyContent:'center',
-      backgroundColor:'yellow'
+      backgroundColor:'rgba(71, 76, 73, 0.77)',
+      borderRadius: 6
     }}
     >
 
@@ -93,23 +92,31 @@ export const DashboardAdmin = () => {
       
     display:'flex',
     flexFlow:'column',
-    width:'70%',
+    width:'85%',
     marginTop:'35px',
-    height:'350px',
-    padding:'50px',
-    gap:'3px'
+    padding:'2px',
+    gap:'9px',
     }}
     component={'form'}
     onSubmit={handleProductSubmit}
     encType="multipart/form-data"
     >
       <TextField
+     
       variant='outlined' 
       type='text'
       label='Nombre del Producto'
       name="name"
       value={name}
       onChange={changeValue}
+        slotProps={{
+       htmlInput: {
+         style: { color: "white" }   // estilo al <input> nativo
+        },
+        inputLabel: {
+         style: { color: "rgba(236, 134, 0, 0.93)" }   // estilo al label
+       }
+  }}
       />
       
       <TextField
@@ -119,6 +126,14 @@ export const DashboardAdmin = () => {
       name="price"
       value={price}
       onChange={changeValue}
+        slotProps={{
+       htmlInput: {
+         style: { color: "white" }   // estilo al <input> nativo
+        },
+        inputLabel: {
+         style: { color: "rgba(236, 134, 0, 0.93)" }   // estilo al label
+       }
+      }}
       />
       <TextField
       variant='outlined' 
@@ -127,34 +142,45 @@ export const DashboardAdmin = () => {
       name="description"
       value={description}
       onChange={changeValue}
+          slotProps={{
+       htmlInput: {
+         style: { color: "white" }   // estilo al <input> nativo
+        },
+        inputLabel: {
+         style: { color: "rgba(236, 134, 0, 0.93)" }   // estilo al label
+       }
+      }}
       />
-      <Button variant="contained" component="label" >
+      <Button variant="contained" color="warning" component="label" >
         Subir imagen
-        <input type="file" onChange={handleImage} hidden/>
+        <input
+         name="img"
+         type="file" 
+         onChange={changeValue} 
+         hidden/>
       </Button>
 
-      <Button  type="submit" variant="contained" color="primary"> cargar Producto</Button>
+      <Button disabled = {disabledSubmit} type="submit" variant="contained" color="warning" > cargar Producto</Button>
     </Box>
     </Box>
-            
-          </Grid>
-          <Grid size={{ xs:12,md:5}}>
-
-          </Grid>
+        
+       
 
 
 
-
-        </Grid>
 
       </Grid>
       <Grid size={{xs:12,md:7}} 
       sx={{
         display:'flex',
-        height: '50vh',
+        height: '100%',
         flexDirection:'column',
         alignItems:'end',
-        padding:'20px'
+        pr:'50px',
+        
+        overflowY: 'auto',      // habilita scroll vertical
+           "&::-webkit-scrollbar": { width: 8 },
+           "&::-webkit-scrollbar-thumb": { backgroundColor: "rgba(0,0,0,0.3)", borderRadius: 8 }
         
      
        

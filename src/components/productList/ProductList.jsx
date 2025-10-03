@@ -83,6 +83,10 @@ export const ProductList = () => {
         >
     
        <Card
+       sx={{
+        backgroundColor:'rgba(255, 255, 255, 0.83)',
+        borderRadius:'10px'
+       }}
        
        >
         <CardMedia

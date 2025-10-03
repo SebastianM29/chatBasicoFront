@@ -8,6 +8,7 @@ import { Perfil } from "../components/Perfil/Perfil";
 import { Calendar } from "../components/Calendar/Calendar";
 import { DashboardAdmin } from "../components/DashboardAdmin/DashboardAdmin";
 import { ProtectedAdmin } from "./ProtectedAdmin";
+import { ManageProfiles } from "../components/ManageProfiles/ManageProfiles";
 
 
 
@@ -63,6 +64,11 @@ export const getRouter = createBrowserRouter([
             {
                 path:'dashboardAdmin',
                 element:<DashboardAdmin/>
+            },
+            {
+                path: 'manageProfiles',
+                element: <ManageProfiles/>
+
             }
         ]
 

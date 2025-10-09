@@ -2,7 +2,8 @@ export const registerUser = async (data) => {
     try {
         const response = await fetch('http://localhost:3000/users/createUser',{
         method:'POST',
-        body:data
+        body:data,
+        credentials: 'include'
     })
     const resp = await response.json()
     if (!response.ok) {

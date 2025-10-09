@@ -34,7 +34,7 @@ export const ProductList = () => {
      queryClient.invalidateQueries({queryKey:['products']})
     },
     onError:(deleteErr) => {
-     onsole.error('error al cargar productos',deleteErr)
+     console.error('error al cargar productos',deleteErr)
     }
 
 

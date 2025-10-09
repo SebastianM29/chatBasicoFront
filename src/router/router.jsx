@@ -9,6 +9,8 @@ import { Calendar } from "../components/Calendar/Calendar";
 import { DashboardAdmin } from "../components/DashboardAdmin/DashboardAdmin";
 import { ProtectedAdmin } from "./ProtectedAdmin";
 import { ManageProfiles } from "../components/ManageProfiles/ManageProfiles";
+import { MonthlyPurchases } from "../components/monthlyPurchases/monthlyPurchases";
+import { YearPurchases } from "../components/YearPurchases/YearPurchases";
 
 
 
@@ -67,7 +69,21 @@ export const getRouter = createBrowserRouter([
             },
             {
                 path: 'manageProfiles',
-                element: <ManageProfiles/>
+                element: <ManageProfiles/>,
+                children:[
+                
+                    {   
+                        
+                        element:<YearPurchases/>,
+                        path:'',
+                        children:[
+                            {
+                            path:'monthlyPurchases',
+                            element:<MonthlyPurchases/>
+                        }
+                       ]
+                    }
+                ]
 
             }
         ]

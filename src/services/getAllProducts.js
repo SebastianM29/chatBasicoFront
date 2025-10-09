@@ -1,7 +1,10 @@
 
 
 export const getAllProducts = async() => {
-    const res = await fetch('http://localhost:3000/admin/allProducts')
+    const res = await fetch('/admin/allProducts',{
+            method:'GET',
+            
+        })
     if (!res.ok) {
         const resp = await res.json()
         console.log('error en la solicitud',res)   ;
@@ -12,7 +15,7 @@ export const getAllProducts = async() => {
     
     const resp = await res.json()
     console.log(resp);
-       return resp
+    return resp
 
 
 }

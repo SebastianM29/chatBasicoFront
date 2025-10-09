@@ -7,7 +7,8 @@ export const sendingProducts = async ( data) => {
       // headers: {
       //   'Content-Type': 'multipart/form-data',
       // },
-      body: data
+      body: data,
+      credentials: 'include'
     })
     if (!response.ok) {
       const errorData = await response.json();

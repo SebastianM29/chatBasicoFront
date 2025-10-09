@@ -19,6 +19,8 @@ export const Register = () => {
     imagePath:'',
   })
   const disabledRegister = Object.values({name,nickname,email,pass}).some((v) => !v)
+
+  //TODO .... revisar los msg que vienen en el error
   const{mutate}=useMutation({
     mutationFn:registerUser,
     onSuccess:(data)   => {

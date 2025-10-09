@@ -4,7 +4,8 @@ export const deleProduct = async (id) => {
             method:'DELETE',
             headers:{
                 'Content-Type':'application/json'
-            }
+            },
+            credentials: 'include'
         })
         const value = await resp.json()
          

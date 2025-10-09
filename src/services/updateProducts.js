@@ -1,11 +1,12 @@
 export const updateProducts = async({id,productUpd}) => {
     console.log('viendo id y prod',id,productUpd);
     
-    const resp = await fetch(`http://localhost:3000/admin/updateProduct/${id}`,{
+    const resp = await fetch(`/admin/updateProduct/${id}`,{
         method:'PUT',
         headers:{
             'Content-Type':'application/json'
         },
+        credentials: 'include',
         body: JSON.stringify(productUpd)
 
     })

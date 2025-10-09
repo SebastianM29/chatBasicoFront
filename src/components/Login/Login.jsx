@@ -6,6 +6,8 @@ import { useEffect, useState } from 'react'
 import { userAuthStore } from '../../store/userAuthStore'
 import { Link, useNavigate } from 'react-router-dom'
 import { enqueueSnackbar } from 'notistack'
+import { useMutation } from '@tanstack/react-query'
+import { loginUser } from '../../services/loginUser'
 
 export const Login = () => {
   const { email, password, changeValue } = useForm({
@@ -20,16 +22,26 @@ export const Login = () => {
   const { checkingAuth, allUsersConnected, getActualUserNickName } = userAuthStore()
   const navigate = useNavigate()
 
-  useEffect(() => {
-    const onValidateUser = (data) => {
-      if (data?._id) {
-        checkingAuth(data)
+  const{mutate} = useMutation({
+    mutationFn: loginUser,
+    onSuccess: (user) => {
+       
+        
+        checkingAuth(user)
+        socket.emit('sendUser', user )
         navigate('/userAuth/dashboard')
-      } else {
+    },
+    onError: (data) => {
         enqueueSnackbar(data,{variant:'error'})
         setOpen(true)
-      }
     }
+
+  })
+
+
+
+  useEffect(() => {
+
 
     const onAllUsers = (users) => {
       allUsersConnected(users)
@@ -41,12 +53,11 @@ export const Login = () => {
       getActualUserNickName(user)
     }
 
-    socket.on('validateUser', onValidateUser)
+    
     socket.on('allUsers', onAllUsers)
     socket.on('userConnected', onUserConnected)
 
     return () => {
-      socket.off('validateUser', onValidateUser)
       // socket.off('allUsers', onAllUsers)
       // socket.off('userConnected', onUserConnected)
     }
@@ -54,7 +65,8 @@ export const Login = () => {
 
   const handleLogin = (e) => {
     e.preventDefault()
-    socket.emit('sendUser', { email, password })
+    mutate({email,password})
+    
   }
 
   const disabledSubmit = !email || !password

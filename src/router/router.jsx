@@ -78,7 +78,7 @@ export const getRouter = createBrowserRouter([
                         path:'',
                         children:[
                             {
-                            path:'monthlyPurchases',
+                            path:'monthlyPurchases/:userId/:year',
                             element:<MonthlyPurchases/>
                         }
                        ]

@@ -18,6 +18,7 @@ addMessages:(data) => set((info) => {
  allConnected: [],
  socket:null,
  buyer:null,
+ userLocation:null,
 
 getActualUserNickName : (user) => {
       set(
@@ -43,9 +44,11 @@ actualBuyer: (data) => {
   console.log('deberia llegar el resultad del cpmpprador',data);
   
   set({buyer:data})
-}
+},
 
-
+giveMeLocation: (user) => { 
+  set({userLocation:user})
+} 
 
 }))
 

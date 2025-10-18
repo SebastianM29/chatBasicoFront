@@ -6,17 +6,26 @@ import { Link } from 'react-router-dom'
 import { useMutation } from '@tanstack/react-query'
 import { registerUser } from '../../services/registerUSer'
 import { enqueueSnackbar } from 'notistack'
+import { Grid, Card } from '@mui/material';
+import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+import { LocationPicker } from '../LocationPicker/LocationPicker'
 
 export const Register = () => {
   const [showPassword, setShowPassword] = useState(false)
-  const [image, setImage] = useState(null)
   
-  const{name,nickname,email,pass,imagePath,changeValue,resetForm} = useForm({
+  const{name,nickname,email,pass,direccion,ciudad,provincia,pais,imagePath,location,changeValue,resetForm} = useForm({
     name:'',
     nickname:'',
     email: '',
     pass:'',
     imagePath:'',
+    direccion:'',
+    ciudad:'',
+    provincia:'',
+    pais:'',
+    location:{lat:-34.6,lng:-58.38}
   })
   const disabledRegister = Object.values({name,nickname,email,pass}).some((v) => !v)
 
@@ -39,6 +48,12 @@ export const Register = () => {
     e.preventDefault()
     // Lógica de registro aquí
     console.log('quiero ver la imagen',imagePath);
+    console.log('location',location);
+
+    const geoLocation = {
+      type:'Point',
+      coordinates:[location.lng, location.lat]
+    }
     
     const formData = new FormData()
 
@@ -47,6 +62,12 @@ export const Register = () => {
     formData.append('email',email)
     formData.append('pass',pass)
     formData.append('imagePath',imagePath)
+    formData.append('direccion',direccion)
+    formData.append('ciudad',ciudad)
+    formData.append('provincia',provincia)
+    formData.append('pais',pais)
+    formData.append('location', JSON.stringify(geoLocation));
+
     mutate(formData)
     resetForm()
     
@@ -54,11 +75,14 @@ export const Register = () => {
 
   return (
     <>
+    <Grid container spacing={1} sx={{ width: '100%', justifyContent: 'space-between' }}>
+    {/* Form column */}
+    <Grid size={{ xs:12,md:6}}>
       <Box
           component="form"
           onSubmit={handleRegister}
           sx={{
-            width: '60%',
+            width: '100%',
             
             bgcolor: 'background.paper',
             borderRadius: 3,
@@ -108,6 +132,46 @@ export const Register = () => {
               fullWidth
               size="medium"
               autoComplete="email"
+            />
+            <TextField
+              type="text"
+              label="Direccion"
+              name="direccion"
+              value={direccion}
+              onChange={changeValue}
+              fullWidth
+              size="medium"
+              autoComplete="direccion"
+            />
+            <TextField
+              type="text"
+              label="Ingrese su Ciudad"
+              name="ciudad"
+              value={ciudad}
+              onChange={changeValue}
+              fullWidth
+              size="medium"
+              autoComplete="ciudad"
+            />
+            <TextField
+              type="text"
+              label="Ingrese su Provincia"
+              name="provincia"
+              value={provincia}
+              onChange={changeValue}
+              fullWidth
+              size="medium"
+              autoComplete="provincia"
+            />
+            <TextField
+              type="text"
+              label="Ingrese su Pais"
+              name="pais"
+              value={pais}
+              onChange={changeValue}
+              fullWidth
+              size="medium"
+              autoComplete="pais"
             />
 
             
@@ -177,7 +241,31 @@ export const Register = () => {
         
         
         </Box>
-      
+         </Grid>
+
+    {/* Map column */}
+    <Grid size={{ xs:12,md:6}}>
+      <Card sx={{ height: { xs: 300, md: '100%' }, borderRadius: 2, overflow: 'hidden' }}>
+        <Box sx={{ height: '100%' }}>
+          <Typography variant="h5" sx={{ textAlign: 'center', mt: 1 }}>
+            Seleccione su ubicación para envío
+          </Typography>
+          <MapContainer
+            center={[-34.6, -58.38]}
+            zoom={12}
+            style={{ height: '100%', width: '100%' }}
+          >
+            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+            <LocationPicker changeValue={changeValue} />
+          </MapContainer>
+        </Box>
+      </Card>
+
+      <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: 'block' }}>
+        Arrastra el marcador y haz click para fijar tu ubicación.
+      </Typography>
+    </Grid>
+  </Grid>
     </>
   )
 }

@@ -68,7 +68,7 @@ export const AppContainer = () => {
             elevation={8}
             sx={{
               width: "100%",
-              maxWidth: 960,
+              maxWidth: 1200,
               borderRadius: 3,
               p: { xs: 2, sm: 3, md: 4 },
               backdropFilter: "blur(6px)",

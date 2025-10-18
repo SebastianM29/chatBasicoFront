@@ -10,6 +10,8 @@ export const allUSers = async () => {
         if (!res.ok) {
             throw new Error(resp?.msg || 'Error al obtener ususarios');
         }
+        console.log('todos los ususariops',resp.users);
+        
         return resp.users
         
     } catch (error) {

@@ -4,8 +4,9 @@
 
 export const updateProducts = async({id,productUpd}) => {
     console.log('viendo id y prod',id,productUpd);
+    const ENDPOINT = `${BASE_URL}/admin/updateProduct/${id}`;
 
-    const resp = await fetch(`${BASE_URL}/admin/updateProduct/${id}`,{
+    const resp = await fetch(ENDPOINT,{
         method:'PUT',
         headers:{
             'Content-Type':'application/json'

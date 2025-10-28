@@ -3,8 +3,9 @@
 
 
 export const MonthlyPurchasesUser = async (id, year) => {
+    const ENDPOINT = `${BASE_URL}/admin/monthlySalesUser/${id}/${year}`;
     try {
-        const res = await fetch(`${BASE_URL}/admin/monthlySalesUser/${id}/${year}`,{
+        const res = await fetch(ENDPOINT,{
             method:'GET',
             credentials: 'include'
         })

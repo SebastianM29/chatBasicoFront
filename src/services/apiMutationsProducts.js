@@ -3,6 +3,7 @@
 
 export const sendingProducts = async ( data) => {
    const ENDPOINT = `${BASE_URL}/admin/addProduct`;
+   // const ENDPOINT = `http://localhost:3000/admin/addProduct`;
 
   try {
     const response = await fetch(ENDPOINT, {

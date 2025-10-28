@@ -3,8 +3,8 @@ const BASE_URL = import.meta.env.VITE_BACKEND_URL; // Ya no necesitas el || "htt
 
 
 export const allUSers = async () => {
-     const ENDPOINT = `${BASE_URL}/admin/allUser`;
 
+    const ENDPOINT = `${BASE_URL}/admin/allUser`;
     try {
         const res = await fetch(ENDPOINT,{
             method:'GET',

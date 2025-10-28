@@ -5,7 +5,8 @@
 
 export const loginUser = async (data) => {
     try {
-         const ENDPOINT = `${BASE_URL}/users/login`;
+        //  const ENDPOINT = `http://localhost:3000/users/login`;
+        const ENDPOINT = `${BASE_URL}/users/login`;
 
         const response = await fetch(ENDPOINT,
             {

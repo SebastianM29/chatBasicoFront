@@ -4,7 +4,8 @@
 
 export const updateUser = async (payload) => {
    console.log('datos a actualizar',payload.userId,payload.data);
-    const resp = await fetch(`${BASE_URL}/admin/editProfileUser/${payload.userId}`,{
+   const ENDPOINT = `${BASE_URL}/admin/editProfileUser/${payload.userId}`;
+    const resp = await fetch(ENDPOINT,{
         method:'PUT',
         headers:{
             'Content-Type':'application/json'

@@ -3,7 +3,8 @@
 
 
 export const deleteUser = async (id) => {
-    const resp = await fetch(`${BASE_URL}/admin/deleteUser/${id}`, {
+    const ENDPOINT = `${BASE_URL}/admin/deleteUser/${id}`;
+    const resp = await fetch(ENDPOINT, {
         method:'DELETE',
         headers: {
             'Content-Type':'application/json'

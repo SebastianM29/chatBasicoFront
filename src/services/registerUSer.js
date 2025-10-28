@@ -3,8 +3,9 @@
 
 
 export const registerUser = async (data) => {
+    const ENDPOINT = `${BASE_URL}/users/createUser`;
     try {
-        const response = await fetch(`${BASE_URL}/users/createUser`,{
+        const response = await fetch(ENDPOINT,{
         method:'POST',
         body:data,
         credentials: 'include'

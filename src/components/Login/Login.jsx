@@ -79,7 +79,7 @@ export const Login = () => {
           component="form"
           onSubmit={handleLogin}
           sx={{
-            width: '50%',
+            width: { xs: '90%', sm: 400 },
 
             
             bgcolor: 'background.paper',

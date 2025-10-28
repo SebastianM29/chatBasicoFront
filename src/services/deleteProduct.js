@@ -2,8 +2,9 @@
 
 
 export const deleProduct = async (id) => {
+    const ENDPOINT = `${BASE_URL}/admin/deleteProduct/${id}`;
     try {
-        const resp = await fetch (`${BASE_URL}/admin/deleteProduct/${id}`, {
+        const resp = await fetch (ENDPOINT, {
             method:'DELETE',
             headers:{
                 'Content-Type':'application/json'

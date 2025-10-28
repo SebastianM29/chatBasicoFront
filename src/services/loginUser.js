@@ -1,7 +1,7 @@
 
 
 
-const BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000"
+ const BASE_URL = import.meta.env.VITE_BACKEND_URL; // Ya no necesitas el || "http://localhost:3000" si lo defines en .env
 
 export const loginUser = async (data) => {
     try {

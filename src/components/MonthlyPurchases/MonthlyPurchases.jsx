@@ -27,6 +27,7 @@ ChartJS.register(
 export const MonthlyPurchases = () => {
   const{userId} = useParams()
   const{year} = useParams()
+  const{name} = useParams()
   //TODO peticion y utilizacion de chart
   
   
@@ -57,7 +58,7 @@ export const MonthlyPurchases = () => {
       
       title: {
         display: true,
-        text:  `Ventas Mensuales del Usuario ${userId} en ${year}`,
+        text:  `Ventas Mensuales del Usuario ${name} en ${year}`,
       },
     }
   } 

@@ -9,7 +9,7 @@ import { Calendar } from "../components/Calendar/Calendar";
 import { DashboardAdmin } from "../components/DashboardAdmin/DashboardAdmin";
 import { ProtectedAdmin } from "./ProtectedAdmin";
 import { ManageProfiles } from "../components/ManageProfiles/ManageProfiles";
-import { MonthlyPurchases } from "../components/monthlyPurchases/MonthlyPurchases";
+import { MonthlyPurchases } from "../components/MonthlyPurchases/MonthlyPurchases";
 import { YearPurchases } from "../components/YearPurchases/YearPurchases";
 
 

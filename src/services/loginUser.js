@@ -1,10 +1,13 @@
 
 
 
+const BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000"
 
 export const loginUser = async (data) => {
     try {
-        const response = await fetch('http://localhost:3000/users/login',
+         const ENDPOINT = `${BASE_URL}/users/login`;
+
+        const response = await fetch(ENDPOINT,
             {
                 method:'POST',
                    headers: {

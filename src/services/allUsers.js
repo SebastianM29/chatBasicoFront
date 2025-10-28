@@ -1,8 +1,12 @@
 
+const BASE_URL = import.meta.env.VITE_BACKEND_URL; // Ya no necesitas el || "http://localhost:3000" si lo defines en .env
+
 
 export const allUSers = async () => {
+     const ENDPOINT = `${BASE_URL}/admin/allUser`;
+
     try {
-        const res = await fetch('http://localhost:3000/admin/allUser',{
+        const res = await fetch(ENDPOINT,{
             method:'GET',
             credentials: 'include'
         })

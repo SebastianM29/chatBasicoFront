@@ -1,6 +1,9 @@
+ const BASE_URL = import.meta.env.VITE_BACKEND_URL; // Ya no necesitas el || "http://localhost:3000" si lo defines en .env
+
+
 export const deleProduct = async (id) => {
     try {
-        const resp = await fetch (`http://localhost:3000/admin/deleteProduct/${id}`, {
+        const resp = await fetch (`${BASE_URL}/admin/deleteProduct/${id}`, {
             method:'DELETE',
             headers:{
                 'Content-Type':'application/json'

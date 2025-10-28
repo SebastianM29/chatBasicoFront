@@ -1,8 +1,11 @@
 
+ const BASE_URL = import.meta.env.VITE_BACKEND_URL; // Ya no necesitas el || "http://localhost:3000" si lo defines en .env
 
 export const sendingProducts = async ( data) => {
+   const ENDPOINT = `${BASE_URL}/admin/addProduct`;
+
   try {
-    const response = await fetch('http://localhost:3000/admin/addProduct', {
+    const response = await fetch(ENDPOINT, {
       method: 'POST',
       // headers: {
       //   'Content-Type': 'multipart/form-data',

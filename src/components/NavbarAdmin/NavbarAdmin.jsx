@@ -15,7 +15,7 @@ export const NavbarAdmin = () => {
    
     const { userAuth, actualUserNickname,imagePath, socket } = userAuthStore();
   const [alert, setAlert] = useState(false);
-  
+  const BASE_URL = import.meta.env.VITE_BACKEND_URL;
   const [anchorEl, setAnchorEl] = useState(null);
   const location = useLocation();
   // const navigate = useNavigate()
@@ -122,7 +122,7 @@ export const NavbarAdmin = () => {
               <Tooltip title={userAuth.nickname || 'Usuario'}>
                 <Avatar
                  alt={userAuth.nickname  || 'Usuario'}
-                 src={imagePath ? `http://localhost:3000/${userAuth.imagePath}` : undefined}
+                 src={imagePath ? `${BASE_URL}/${userAuth.imagePath}` : undefined}
                   sx={{
                     
                     width: 36, height: 36,

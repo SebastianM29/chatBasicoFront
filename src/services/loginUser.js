@@ -5,6 +5,7 @@
 
 export const loginUser = async (data) => {
     try {
+        console.log('BASE_URL utilizada en este entorno:', BASE_URL);
         //  const ENDPOINT = `http://localhost:3000/users/login`;
         const ENDPOINT = `${BASE_URL}/users/login`;
 

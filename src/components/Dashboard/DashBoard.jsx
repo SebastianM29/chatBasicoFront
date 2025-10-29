@@ -11,6 +11,8 @@ import { AnimatePresence, motion } from "framer-motion";
 
 
 export const DashBoard = () => {
+  const BASE_URL = import.meta.env.VITE_BACKEND_URL;
+
   const [data, setData] = useState(null);  // { product, time }
   const [oferta, setOferta] = useState(null);
   const [user, setuser] = useState(null)
@@ -125,7 +127,7 @@ export const DashBoard = () => {
          />
         <CardMedia
           component="img"
-          image={`http://localhost:3000${data?.product?.imagePath}`}
+          image={`${BASE_URL}${data?.product?.imagePath}`}
           alt={data.product.productName}
           sx={{
             objectFit: "cover",
@@ -264,7 +266,7 @@ export const DashBoard = () => {
           border: "1px solid rgba(255,255,255,0.14)",
         }}
       >
-        <Avatar src={user ? `http://localhost:3000/${user?.highestBidder?.imagePath}` : undefined} />
+        <Avatar src={user ? `${BASE_URL}/${user?.highestBidder?.imagePath}` : undefined} />
         <Typography variant="h6" fontWeight={900}>
           Última oferta: ${oferta?.highestBid} por {oferta?.highestBidder?.nickname}
         </Typography>

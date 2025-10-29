@@ -9,7 +9,7 @@ export const Chat = () => {
   const [thisUser, setThisUser] = useState();
   const { allConnected, messages,imagePath } = userAuthStore();
   const { msg, changeValue ,resetForm} = useForm({ nickname: "", msg: "" });
-
+  const BASE_URL = import.meta.env.VITE_BACKEND_URL;
   const scrollRef = useRef(null);
   useEffect(() => {
     socket.emit('whoAmI', (user) => {
@@ -86,7 +86,7 @@ export const Chat = () => {
               }}
             >
               <ListItemAvatar>
-                <Avatar src={imagePath ? `http://localhost:3000/${user.imagePath}` : undefined} sx={{ fontWeight: 700 }}>
+                <Avatar src={imagePath ? `${BASE_URL}/${user.imagePath}` : undefined} sx={{ fontWeight: 700 }}>
                   {(user.nickname?.[0] || 'U').toUpperCase()}
                 </Avatar>
               </ListItemAvatar>

@@ -12,7 +12,7 @@ export const ProductList = () => {
    const [productSelect , setProductSelect] = useState()
    const [modal,setModal] = useState(false)
   
-
+  const BASE_URL = import.meta.env.VITE_BACKEND_URL;
   const {data:prod,isLoading} = useQuery({
     queryKey:['products'],
     queryFn: getAllProducts,
@@ -91,7 +91,7 @@ export const ProductList = () => {
        >
         <CardMedia
         component={'img'}
-        image={`http://localhost:3000${product.imagePath}`}
+        image={`${BASE_URL}${product.imagePath}`}
         
         sx={{
           objectFit:'cover',

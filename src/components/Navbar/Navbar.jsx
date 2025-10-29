@@ -10,6 +10,8 @@ import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import { Link, NavLink, redirect, useLocation, useNavigate } from 'react-router-dom';
 import { userAuthStore } from '../../store/userAuthStore';
 import { useEffect, useMemo, useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { logoutUser } from '../../services/logoutUser';
 
 export const Navbar = () => {
   const { userAuth, actualUserNickname,imagePath, socket } = userAuthStore();
@@ -18,12 +20,23 @@ export const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const location = useLocation();
   // const navigate = useNavigate()
- 
+  const { mutate } = useMutation({
+    mutationFn: logoutUser,
+    onSuccess: (msg) => {
+      console.log('logout exitoso', msg);
+      sock.emit('logout');
+      sock.disconnect();
+      window.location.href = '/login';
+    },
+    onError: (error) => {
+      console.error('error en logout', error);
+    }
+  })
   const handleClose = () => {
-    console.log('cerrando sesión',userAuth);
-    
-   sock.disconnect();
-   window.location.href = '/login';
+   console.log('cerrando sesión',userAuth);
+
+   mutate();
+
   };
   
  
